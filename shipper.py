@@ -1,31 +1,57 @@
 import json
+import time
 import requests
 import urllib3
-import certifi
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 from config import *
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 headers = {
     "Authorization": f"Splunk {SPLUNK_TOKEN}"
 }
 
-with open(LOG_FILE) as f:
-    line = f.readline()
 
-event = json.loads(line)
+def send_to_splunk(event):
+    payload = {
+        "host": "oracle-vps",
+        "source": "cowrie",
+        "sourcetype": "cowrie:json",
+        "event": event,
+    }
 
-payload = {
-    "event": event,
-    "sourcetype": "_json"
-}
+    response = requests.post(
+        SPLUNK_URL,
+        headers=headers,
+        json=payload,
+        verify=VERIFY_SSL,
+        timeout=10,
+    )
 
-response = requests.post(
-    SPLUNK_URL,
-    headers=headers,
-    json=payload,
-    verify=VERIFY_SSL,
-    timeout=10,
-)
+    if response.status_code != 200:
+        print("Failed:", response.text)
+    else:
+        print(f"Sent: {event['eventid']}")
 
-print(response.status_code)
-print(response.text)
+
+with open(LOG_FILE, "r") as f:
+
+    # Jump to the end of the file
+    f.seek(0, 2)
+
+    print("Watching for new Cowrie events...")
+
+    while True:
+
+        line = f.readline()
+
+        if not line:
+            time.sleep(0.5)
+            continue
+
+        try:
+            event = json.loads(line)
+            send_to_splunk(event)
+
+        except json.JSONDecodeError:
+            print("Invalid JSON")
