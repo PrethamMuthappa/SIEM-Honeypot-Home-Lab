@@ -28,7 +28,7 @@ now we can see that data ingestion is successful and can be viewed here
 
 # Deploying Cowrie in vps
 
-we will be using cowrie through VPS so we can isolate stuff 
+we will be using cowrie through Docker so we can isolate stuff 
 
 Install Docker and compose
 
@@ -42,5 +42,15 @@ Just pull up the cowrie docker image and run it , if you try to build the docker
 
 **Allow ingress rule to allow port 2222**
 
+Along with this we also create a folder where the docker will store the logs, we then use these logs and feed it to splunk
 
 
+# Setting up python script to read logs and send to splunk
+
+we automate this process by setting up a python script to read all the logs and do a post request to splunk
+
+In here i came across a problem of SSL certificate issue so fixing it with generating a new cert but still doesn't work well do going to be turning off SSL= false for now its not recommended but for now it will do 
+
+**First try** : Sent a single request to splunk to check if the logs are being read and queried in splunk (**Works!**)
+
+**Next step**: will automate this part where every logs will be streamed to splunk
