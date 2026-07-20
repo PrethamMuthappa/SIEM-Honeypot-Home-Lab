@@ -5,11 +5,14 @@ import urllib3
 
 from config import *
 
+session=requests.Session()
+
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-headers = {
+session.headers.update({
     "Authorization": f"Splunk {SPLUNK_TOKEN}"
-}
+})
 
 
 def send_to_splunk(event):
@@ -20,9 +23,8 @@ def send_to_splunk(event):
         "event": event,
     }
 
-    response = requests.post(
+    response = session.post(
         SPLUNK_URL,
-        headers=headers,
         json=payload,
         verify=VERIFY_SSL,
         timeout=10,
