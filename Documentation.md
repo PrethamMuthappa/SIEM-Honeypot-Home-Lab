@@ -74,6 +74,14 @@ and we can also built charts to visualize them
 
 
 
+I came across a major problem during this time, all ssh logs, ip address, passwords were all get logged normally but i noticed you actually cannot ssh into the shell after u enter the password 
+
+for example when you `ssh -p 2222 root@ipaddrs` and when u enter any password it just gets stuck when it was supposed to let you log in to the shell irrespective of the password
+
+**The Fix**
+
+The cowrie docker image doesn't ship tty in the docker package and you had to install it and by that i was able to get into the cowrie shell
+
 
 
 
