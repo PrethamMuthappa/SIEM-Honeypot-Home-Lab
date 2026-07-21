@@ -21,7 +21,8 @@ curl -k https://URL----.splunkcloud.com:8088/services/collector/event \
     "source": "manual-test"
   }'
 
-![[Screenshot 2026-07-20 at 8.03.32 AM.png]]
+<img width="1469" height="834" alt="Screenshot 2026-07-20 at 8 03 32 AM" src="https://github.com/user-attachments/assets/2cb52f88-9235-4ca0-b78b-b1297e25618f" />
+
 
 now we can see that data ingestion is successful and can be viewed here 
 
@@ -66,8 +67,14 @@ and we can also built charts to visualize them
 
 
 
-![[Screenshot 2026-07-21 at 12.58.49 PM.png]]
+<img width="1470" height="956" alt="Screenshot 2026-07-21 at 12 58 49 PM" src="https://github.com/user-attachments/assets/762ed158-26cd-4f53-ac05-f0a21a5139f1" />
 
-![[Screenshot 2026-07-21 at 12.48.58 PM.png]]![[Screenshot 2026-07-21 at 1.11.39 PM.png]
+
+<img width="1470" height="956" alt="Screenshot 2026-07-21 at 1 11 39 PM" src="https://github.com/user-attachments/assets/71b6085f-01a4-450f-b24f-01b888f7cded" />
+
+
+
+
+
 
 
