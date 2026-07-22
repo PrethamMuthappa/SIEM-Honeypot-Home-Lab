@@ -36,24 +36,39 @@ def send_to_splunk(event):
         print(f"Sent: {event['eventid']}")
 
 
-with open(LOG_FILE, "r") as f:
-
-    # Jump to the end of the file
-    f.seek(0, 2)
+def follow():
+    f = open(LOG_FILE, "r")
+    f.seek(0, os.SEEK_END)
+    inode = os.fstat(f.fileno()).st_ino
 
     print("Watching for new Cowrie events...")
 
     while True:
-
         line = f.readline()
 
-        if not line:
-            time.sleep(0.5)
+        if line:
+            try:
+                event = json.loads(line)
+                send_to_splunk(event)
+            except json.JSONDecodeError:
+                print("Invalid JSON")
             continue
 
-        try:
-            event = json.loads(line)
-            send_to_splunk(event)
+        time.sleep(0.5)
 
-        except json.JSONDecodeError:
-            print("Invalid JSON")
+        try:
+            new_inode = os.stat(LOG_FILE).st_ino
+        except FileNotFoundError:
+            continue
+
+        if new_inode != inode:
+            print("Log rotated. Reopening...")
+
+            f.close()
+            f = open(LOG_FILE, "r")
+            inode = os.fstat(f.fileno()).st_ino
+
+
+
+       
+follow()       
